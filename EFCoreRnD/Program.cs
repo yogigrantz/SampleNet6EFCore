@@ -9,9 +9,28 @@
  */
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using TestEFCore.Test;
 using TestEFCore.TestDataFirst;
 
 Console.WriteLine("test");
+
+using (TestContext tc = new TestContext())
+{
+    Candidate c = new Candidate()
+    {
+        SSN = "425551234",
+        BioHeader = "Graphics Designer",
+        Bio = "Expert in Graphics Design",
+        CompanyName = "Test Inc",
+        Name = "Butter Dog"
+    };
+    tc.Add(c);
+    int result = tc.SaveChanges();
+}
+
+return;
+
+// Below is the code for executing existing SP, which requires Data-First approach
 
 Note n = new Note()
 {
