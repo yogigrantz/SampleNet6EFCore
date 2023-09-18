@@ -1,0 +1,105 @@
+
+//EF Core Data First - Start an EF Core program with 6 steps:
+
+1. Install Nuget packages
+
+2. Create Entity classes
+
+3. Create a local DBContext
+
+4. Invoke migration command
+
+5. Use the DBContext
+
+---------------------------------------------------------------------------
+
+1. Upon creating a .net solution, add thes Nuget packages: 
+
+	install-package Microsoft.EntityFrameworkCore.SqlServer 
+	install-package Microsoft.EntityFrameworkCore.Tools
+
+2. Create entity classes that will become SQL Tables, i.e: 
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TestEFCore.Test;
+
+[Table("Candidate", Schema = "EFData")]
+public class Candidate
+{
+    public int CandidateId { get; set; }
+    [MaxLength(50), Required]
+    public string Name { get; set; }
+    [MaxLength(11), Required]
+    public string SSN { get; set; }
+    [MaxLength(50), Required]
+    public string JobTitle { get; set; }
+    [MaxLength(50), Required]
+    public string CompanyName { get; set; }
+}
+
+[Table("Client", Schema = "EFData")]
+public class Client
+{
+    public int ClientId { get; set; }
+    [MaxLength(50), Required]
+    public string CompanyName { get; set; }
+    [MaxLength(20), Required]
+    public string Phone { get; set; }
+    [MaxLength(50), Required]
+    public string Email { get; set; }
+}
+
+
+*** Note that each table / entity must contain auto-id field, which must be <TableName>Id 
+
+3. Create a local DBContext file to wrap these entities and to initialize them if needed. 
+   The DBContext inherits from  EF Core DbContext, which contain the CRUD functionality for each DBSet that it contains
+
+
+using Microsoft.EntityFrameworkCore;
+
+namespace TestEFCore.Test;
+
+public class TestContext : DbContext
+{
+    private string _connStr = "server=(localdb)\\MSSQLLocalDB;database=EFCoreTest;Integrated Security=SSPI";
+
+    public TestContext()
+    {
+
+    }
+    protected override void OnConfiguring(DbContextOptionsBuilder option)
+    {
+        option.UseSqlServer(_connStr);
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+    }
+
+    public TestContext(DbContextOptions<TestContext> options) : base(options)
+    {
+    }
+
+    public DbSet<Candidate> Candidates{ get; set; }
+
+    public DbSet<Client> Clients{ get; set; }
+
+}
+
+
+4. In NuGet package manager, invoke these commands: 
+
+	add-migration 'init1' 
+
+	update-database
+
+5. In the program, include: 
+
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
+and start using the DBContext

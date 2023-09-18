@@ -1,0 +1,10 @@
+
+1. Add nuget packages: 
+
+	install-package Microsoft.EntityFrameworkCore.SqlServer
+	install-package Microsoft.EntityFrameworkCore.Tools
+
+2. Scaffold current DB:
+
+	Scaffold-DbContext "server=(localdb)\MSSQLLocalDB;database=testDB;integrated security=SSPI;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir TestDataFirst -Force
+ 

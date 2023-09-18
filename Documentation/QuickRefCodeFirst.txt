@@ -1,0 +1,22 @@
+
+1. Add nuget packages: 
+
+	install-package Microsoft.EntityFrameworkCore.SqlServer
+	install-package Microsoft.EntityFrameworkCore.Tools
+
+2. Create Entity Classes
+
+3. Create Context Class
+
+    protected override void OnConfiguring(DbContextOptionsBuilder option)
+    {
+        option.UseSqlServer(_connStr);
+    }
+
+    public DbSet<T> ...
+
+
+4. add-migration 'init' 
+   update-database
+
+5. Code
